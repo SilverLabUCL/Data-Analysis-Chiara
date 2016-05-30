@@ -16,27 +16,18 @@ folders{10} = 'C:\Data Analysis\Clyde\15 March 2016\Clyde Cell 1 BranchesCoactiv
 folders{11} = 'C:\Data Analysis\Clyde\15 March 2016\Clyde Cell 2 BranchesCoactive';
 folders{12} = 'C:\Data Analysis\Bonnie\14 March 2016\Bonnie Cell 7 BranchesCoactive.mat';
 
-AllData1 = [];
-AllData2 = [];
+AllData = [];
+
 for cell = 1:length(folders)
     
     load(folders{cell})
     [ PercTimesActive1,   PercTimesActive2] = PercAPsEachBranchDivideTwo( BranchesCoActivebAP, ImagedBranchesbAP );
     
-    AllData1 = [AllData1 PercTimesActive1(2:end)];
-    AllData2 = [AllData2 PercTimesActive2(2:end)];
+    AllData = [AllData PercTimesActive1(2:end)];
+
 end
 
 figure;
-hist(AllData1)
-title('1')
+hist(AllData)
 
-figure;
-hist(AllData2)
-title('2')
-
-figure; hist([AllData1' AllData2'],20)
-title('Blue - 1, Red - 2')
-xlabel('% of times active during a somatic calcium transient')
-ylabel('Number of dendrites')
 
