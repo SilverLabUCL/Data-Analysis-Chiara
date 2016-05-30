@@ -1,5 +1,4 @@
-
-FileRunStatData = 'C:\Data Analysis\RunStatL2L5.mat';
+FlagSave = 1;
 
 % L2 neurons, anaesthetized
 filesL2{1} = 'C:\Data Analysis\Mary\24 April 2015\BranchActivityAnaesthet 17-Feb-2016.mat';
@@ -7,21 +6,26 @@ filesL2{2} = 'C:\Data Analysis\Robinson\11 July 2015\BranchActivityAnaesthet 17-
 filesL2{3} = 'C:\Data Analysis\Karina\20 January 2016\BranchActivityAnaesthet 18-Feb-2016.mat';
 filesL2{4} = 'C:\Data Analysis\Bonnie\03 March 2016\Cell 1 Activity Anaesth\BranchActivityAnaesthet 31-Mar-2016.mat';
 filesL2{5} = 'C:\Data Analysis\Bonnie\03 March 2016\Cell 2 Activity Anaesth\BranchActivityAnaesthet 31-Mar-2016.mat';
-%filesL2{6} = 'C:\Data Analysis\Bonnie\03 March 2016\Cell 3 Activity Anaesth\BranchActivityAnaesthet 31-Mar-2016.mat';
+filesL2{6} = 'C:\Data Analysis\Bonnie\03 March 2016\Cell 3 Activity Anaesth\BranchActivityAnaesthet 31-Mar-2016.mat';
+filesL2{7} = 'C:\Data Analysis\Bonnie\03 March 2016\Cell 6 Activity Anaesth\BranchActivityAnaesthet 30-May-2016.mat';
 
 % L2, stationary
 filesL2Stat{1} = 'C:\Data Analysis\Mary\09 April 2015\Run Stat\BranchActivityRunStat 17-Feb-2016.mat';
 filesL2Stat{2} = 'C:\Data Analysis\Robinson\26 June 2015\Cell 2 Run Stat\BranchActivityRunStat 17-Feb-2016.mat';
 filesL2Stat{3} = 'C:\Data Analysis\Karina\09 February 2016\Cell 5 Run Stat\BranchActivityRunStat 17-Feb-2016.mat';
-filesL2Stat{4} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 1 Run Stat\BranchActivityRunStat 17-Feb-2016.mat';
+filesL2Stat{4} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 1 Run Stat\BranchActivityRunStat 30-May-2016.mat';
 filesL2Stat{5} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 2 Run Stat\BranchActivityRunStat 17-Feb-2016.mat';
+filesL2Stat{6} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 3 Gratings\BranchActivityRunStat 18-Feb-2016.mat';
+filesL2Stat{7} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 6 Gratings\BranchActivityRunStat 30-May-2016.mat';
 
 % correspondances branches in awake and anaesthetized
 IndexStat2{1} = [2:9 12:18];
 IndexStat2{2} = 2:18;
 IndexStat2{3} = [2 5 6:9 12];
 IndexStat2{4} = [2:15 18 19];
-IndexStat2{5} = [5 8 9 2 3 4]; 
+IndexStat2{5} = [5 8 9 2 3 4];
+IndexStat2{6} = [2 3 4 6 7 8 9 10 11 12 13 14];
+IndexStat2{7} = [2 3 4 13 14 15 12]; % here more branches in anaesthetized cell than in awake
 
 % L5 neurons, anaesthetized
 filesL5{1} = 'C:\Data Analysis\Veronica\14 October 2014\BranchAct Anaesth 27Feb Neuron4\BranchActivityAnaesthet 27-Feb-2015.mat';
@@ -42,7 +46,7 @@ IndexStat5{1} = [1 2 10:12 13 13 13 14 3:9 15];
 IndexStat5{2} = [1:4 6:9 13:17];
 IndexStat5{3} = 1:13;
 IndexStat5{4} = [1:5 5 5];
-IndexStat5{5} = 1:15; 
+IndexStat5{5} = 1:15;
 
 % intialise
 BranchesAn2 = [];
@@ -54,18 +58,33 @@ SomaStat = [];
 
 % load data
 % L2
-for f = 1:length(filesL2)  
+for f = 1:length(filesL2)
     
-    % load data for anaesthetized
-    load(filesL2{f},'ActivitySegStat')
-    BranchesAn2 = [BranchesAn2 ActivitySegStat(2:end)];
-    SomaAn = [SomaAn ActivitySegStat(1)];
+    if f ~= 7
+        % load data for anaesthetized
+        load(filesL2{f},'ActivitySegStat')
+        BranchesAn2 = [BranchesAn2 ActivitySegStat(2:end)];
+        SomaAn = [SomaAn ActivitySegStat(1)];
+        
+        % load data for awake stationary
+        load(filesL2Stat{f},'ActivitySegStat')
+        BranchesStat2 = [BranchesStat2 ActivitySegStat(IndexStat2{f})];
+        SomaStat = [SomaStat ActivitySegStat(1)];
     
-    % load data for awake stationary
-    load(filesL2Stat{f},'ActivitySegStat')
-    BranchesStat2 = [BranchesStat2 ActivitySegStat(IndexStat2{f})];
-    SomaStat = [SomaStat ActivitySegStat(1)];
+    else % in the last cell, there are more branches in aanesthetized than awake, so remove branches from awake to match
+        % load data for anaesthetized
+        load(filesL2{f},'ActivitySegStat')
+        BranchesAn2 = [BranchesAn2 ActivitySegStat(IndexStat2{f})];
+        SomaAn = [SomaAn ActivitySegStat(1)];
+        
+        % load data for awake stationary
+        load(filesL2Stat{f},'ActivitySegStat')
+        BranchesStat2 = [BranchesStat2 ActivitySegStat(2:end)];
+        SomaStat = [SomaStat ActivitySegStat(1)];
+    end
 end
+
+
 
 % L5
 for  f = 1:length(filesL5)
@@ -108,30 +127,30 @@ disp(['Paired t-test for L5 branches: ' num2str(h) ', P-value = ' num2str(pL5*10
 [h,pS] = ttest(SomaAn, SomaStat);
 disp(['Paired t-test for L2 somas: ' num2str(h) ', P-value = ' num2str(pS*100)])
 
-% plot histograms
-figure;
-bar([1 2],[BrStatMean2 BrAnMean2 ])
-hold on
-errorbar([1 2],[BrStatMean2 BrAnMean2 ],[BrStatSem2 BrAnSem2],'.k')
-xlim([0 3])
-title('Dendrites of L2 neurons')
-box off
-
-figure;
-bar([1 2],[SomaStatMean SomaAnMean])
-hold on
-errorbar([1 2],[SomaStatMean SomaAnMean],[SomaStatSem SomaAnSem],'.k')
-xlim([0 3])
-title('Somas of L2 neurons')
-box off
-
-figure;
-bar([1 2],[BrStatMean5 BrAnMean5])
-hold on
-errorbar([1 2],[BrStatMean5 BrAnMean5],[BrStatSem5 BrAnSem5],'.k')
-xlim([0 3])
-title('Dendrites of L5 neurons')
-box off
+% % plot histograms
+% figure;
+% bar([1 2],[BrStatMean2 BrAnMean2 ])
+% hold on
+% errorbar([1 2],[BrStatMean2 BrAnMean2 ],[BrStatSem2 BrAnSem2],'.k')
+% xlim([0 3])
+% title('Dendrites of L2 neurons')
+% box off
+% 
+% figure;
+% bar([1 2],[SomaStatMean SomaAnMean])
+% hold on
+% errorbar([1 2],[SomaStatMean SomaAnMean],[SomaStatSem SomaAnSem],'.k')
+% xlim([0 3])
+% title('Somas of L2 neurons')
+% box off
+% 
+% figure;
+% bar([1 2],[BrStatMean5 BrAnMean5])
+% hold on
+% errorbar([1 2],[BrStatMean5 BrAnMean5],[BrStatSem5 BrAnSem5],'.k')
+% xlim([0 3])
+% title('Dendrites of L5 neurons')
+% box off
 
 % plot all datapoints
 figure;
@@ -160,3 +179,12 @@ end
 xlim([0 3])
 box off
 title('Dendrites of L5 neurons')
+
+if FlagSave
+   d = date;
+   save('AnaesthAwakeL2L5.mat') 
+   
+   saveas(gcf,'Dendrites L5.fig')
+   saveas(gcf-1,'Somas L2.fig')
+   saveas(gcf-2,'Dendrites L2.fig')
+end
