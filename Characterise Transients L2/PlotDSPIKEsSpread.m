@@ -56,18 +56,19 @@ for s = 1:nStacks
     % load data
     load(FilesLoaded{s},'BranchesActiveDSPIKE','DSPIKEAmpl','DSPIKESInt','Segments')
     % save and concatenate info for each stack
-    BranchesActiveAll = [BranchesActiveAll; BranchesActiveDSPIKE];
-    Ampl = [Ampl; DSPIKEAmpl];
-    Integr = [Integr; DSPIKESInt];
-    
-    
-    for sp = 1:length(BranchesActiveDSPIKE)
-        counter = counter + 1;
-        N_BranchesActive(counter) = length(BranchesActiveDSPIKE{sp});
-        n_segments(counter) = length(Segments);
-        SegmentsImaged{counter} = Segments;
+    if length(Segments) > 5 % assume always image soma, so need minimum 4 branches imaged
+        BranchesActiveAll = [BranchesActiveAll; BranchesActiveDSPIKE];
+        Ampl = [Ampl; DSPIKEAmpl];
+        Integr = [Integr; DSPIKESInt];
+        
+        
+        for sp = 1:length(BranchesActiveDSPIKE)
+            counter = counter + 1;
+            N_BranchesActive(counter) = length(BranchesActiveDSPIKE{sp});
+            n_segments(counter) = length(Segments);
+            SegmentsImaged{counter} = Segments;
+        end
     end
-    
 end
 
 %% plot position of branch vs how often the branch is active during a dendritic spike
@@ -91,7 +92,7 @@ for br = 1:n_all_segments
     EuclBranch(br) = mean(EuclNodes(find(NodesInfo(:,1) == br)));
     
     if ismember(br,SegmentsImagedMat) == 1
-    BranchActivePerc(br) =  length(find(BranchesActiveAllMat == br))/length(find(SegmentsImagedMat == br))*100;
+        BranchActivePerc(br) =  length(find(BranchesActiveAllMat == br))/length(find(SegmentsImagedMat == br))*100;
     end
 end
 

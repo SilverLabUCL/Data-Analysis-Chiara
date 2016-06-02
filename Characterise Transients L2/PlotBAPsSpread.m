@@ -1,4 +1,4 @@
-function PlotBAPsSpread( nStacks, FlagSave, ScalingFactorInfo, FilesLoaded )
+function PlotBAPsSpread( nStacks, FlagSave, ScalingFactorInfo, FilesLoaded, TreeLoaded )
 % Plots distance from the soma and number of bAPs, and also number of
 % branches coactive versus amplitude BAPs
 
@@ -39,8 +39,10 @@ counter2 = 0;
 %% load data
 
 % load file with tree info
-[FileName, PathName] = uigetfile('*.mat',['Select the file with the data for the dendritic tree']);
-TreeLoaded = [PathName FileName];
+if nargin < 5
+    [FileName, PathName] = uigetfile('*.mat',['Select the file with the data for the dendritic tree']);
+    TreeLoaded = [PathName FileName];
+end
 load(TreeLoaded, 'SortedTree', 'NodesInfo')
 
 for s = 1:nStacks
@@ -54,17 +56,18 @@ for s = 1:nStacks
     % load data
     load(FilesLoaded{s},'BranchesActivebAPs','BAPSVal','Segments')
     % save and concatenate info for each stack
-    BranchesActiveAll = [BranchesActiveAll; BranchesActivebAPs];
-    BAPSValAll(counter1 : counter1 + size(BAPSVal,1)-1, 1:2 ) = BAPSVal;
-    counter1 = counter1 + size(BAPSVal,1);
-    
-    for bap = 1:length(BranchesActivebAPs)
-        counter2 = counter2 + 1;
-        N_BranchesActive(counter2) = length(BranchesActivebAPs{bap});
-        n_segments(counter2) = length(Segments);
-        SegmentsImaged{counter2} = Segments;
+    if length(Segments) > 5
+        BranchesActiveAll = [BranchesActiveAll; BranchesActivebAPs];
+        BAPSValAll(counter1 : counter1 + size(BAPSVal,1)-1, 1:2 ) = BAPSVal;
+        counter1 = counter1 + size(BAPSVal,1);
+        
+        for bap = 1:length(BranchesActivebAPs)
+            counter2 = counter2 + 1;
+            N_BranchesActive(counter2) = length(BranchesActivebAPs{bap});
+            n_segments(counter2) = length(Segments);
+            SegmentsImaged{counter2} = Segments;
+        end
     end
-   
 end
 
 %% plot position of branch vs how often the branch is active during a bAP
