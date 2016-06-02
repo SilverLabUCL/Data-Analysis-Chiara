@@ -42,13 +42,13 @@ load(FileLoaded,'ResponsesBin','Segments','TransientsChar')
 [ BranchesActiveDSPIKE, DSPIKEAmpl, DSPIKESInt ] = PlotBranchesActive(0, DendriticSpikesFinal, Segments, TransientsChar, 0, [], []);
 
 % plot spatial distribution of both
-[~, ResponsesDistPercAll] = SpatialDistributionSpikesL2( ResponsesBin, Segments, TransientsChar, 1 );
+[~, ResponsesDistPercAll] = SpatialDistributionSpikesL2( ResponsesBin(2:end,:), Segments(2:end), TransientsChar, 1 );
 for h = (gcf - 2) : gcf
     figure(h); title('All Responses')
 end
 
 if sum(sum(DendriticSpikesFinal)) > 0
-[~, ResponsesDistPercdSpike] = SpatialDistributionSpikesL2( DendriticSpikesFinal, Segments, TransientsChar, 1 );
+[~, ResponsesDistPercdSpike] = SpatialDistributionSpikesL2( DendriticSpikesFinal(2:end,:), Segments(2:end), TransientsChar, 1 );
 for h = (gcf - 2) : gcf
     figure(h); title('Dendritic Spikes')
 end
@@ -57,7 +57,7 @@ else
 end
 
 if sum(sum(bAPsFinal)) > 0
-    [~, ResponsesDistPercbAP] = SpatialDistributionSpikesL2( bAPsFinal, Segments, TransientsChar, 1 );
+    [~, ResponsesDistPercbAP] = SpatialDistributionSpikesL2( bAPsFinal(2:end,:), Segments(2:end), TransientsChar, 1 );
     for h = (gcf - 2) : gcf
         figure(h); title('bAPs')
     end

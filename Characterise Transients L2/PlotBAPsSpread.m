@@ -63,8 +63,8 @@ for s = 1:nStacks
         
         for bap = 1:length(BranchesActivebAPs)
             counter2 = counter2 + 1;
-            N_BranchesActive(counter2) = length(BranchesActivebAPs{bap});
-            n_segments(counter2) = length(Segments);
+            N_BranchesActive(counter2) = length(BranchesActivebAPs{bap})-1; % remove soma
+            n_segments(counter2) = length(Segments)-1; % remove soma
             SegmentsImaged{counter2} = Segments;
         end
     end

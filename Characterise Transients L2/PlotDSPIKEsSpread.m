@@ -65,7 +65,7 @@ for s = 1:nStacks
         for sp = 1:length(BranchesActiveDSPIKE)
             counter = counter + 1;
             N_BranchesActive(counter) = length(BranchesActiveDSPIKE{sp});
-            n_segments(counter) = length(Segments);
+            n_segments(counter) = length(Segments)-1; % remove soma, assume always image soma
             SegmentsImaged{counter} = Segments;
         end
     end
