@@ -6,8 +6,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % parameters
 
-% path of cells with data
-% during gratings presentation
+% % path of cells with data
+% % during gratings presentation
 % folders{1} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 1 Gratings';
 % folders{2} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 3 Gratings';
 % folders{3} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 5 Gratings';
@@ -21,7 +21,7 @@
 % folders{11} = 'C:\Data Analysis\Clyde\15 March 2016\Cell 2';
 % folders{12} = 'C:\Data Analysis\Bonnie\14 March 2016';
 
-% % grating presentation, but only apical dendrites
+% grating presentation, but only apical dendrites
 % folders{1} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 1 Gratings\Spike Distribution Apical Dendrite';
 % folders{2} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 5 Gratings\Spike Distribution Apical dendrite';
 % folders{3} = 'C:\Data Analysis\Tina\03 February 2015\Spike Distrib Gratings Cell 1\Spike Distribution Apical dendrites';
@@ -33,7 +33,7 @@
 % folders{9} = 'C:\Data Analysis\Clyde\15 March 2016\Cell 1\SPike Distribution Apical dendrites';
 % folders{10} = 'C:\Data Analysis\Bonnie\14 March 2016\Apical dendrites only';
 
-% % when animal is in the dark
+% % % when animal is in the dark
 % folders{1} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 1 Dark';
 % folders{2} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 3 Dark';
 % folders{3} = 'C:\Data Analysis\Bonnie\09 February 2016\Cell 5 Dark';
@@ -45,15 +45,15 @@
 % %rig 3 data
 folders{1} = 'C:\Data Analysis\Rig3\2016-March-01\Cell 1';
 folders{2} = 'C:\Data Analysis\Rig3\2016-March-01\Cell 2';
-folders{3} = 'C:\Data Analysis\Rig3\2016-March-02';
-folders{4} = 'C:\Data Analysis\Rig3\2016-March-11 Bonnie\Cell 1';
-folders{5} = 'C:\Data Analysis\Rig3\2016-March-11 Bonnie\Cell 2';
-folders{6} = 'C:\Data Analysis\Rig3\2016-March-11 Clyde\Cell 1';
-folders{7} = 'C:\Data Analysis\Rig3\2016-March-11 Clyde\Cell 2';
+folders{3} = 'C:\Data Analysis\Rig3\2016-March-11 Bonnie\Cell 1';
+folders{4} = 'C:\Data Analysis\Rig3\2016-March-11 Bonnie\Cell 2';
+folders{5} = 'C:\Data Analysis\Rig3\2016-March-11 Clyde\Cell 2';
+%folders{3} = 'C:\Data Analysis\Rig3\2016-March-02'; % not enough branches imaged
+%folders{6} = 'C:\Data Analysis\Rig3\2016-March-11 Clyde\Cell 1';
 
-FlagSave = 0;
+FlagSave = 1;
 
-BinCenters = [10 20 30 40 50 60 70 80 90 100];
+BinCenters = [0 10 20 30 40 50 60 70 80 90 100];
 n_bins = length(BinCenters); % set the bins in histogram, depends on number of imaged branches
 
 nCells = length(folders);
