@@ -33,7 +33,7 @@ folders{28} = 'C:\Data Analysis\Bonnie\09 February 2016\160209_20_20_00\Cell 6';
 folders{29} = 'C:\Data Analysis\Bonnie\14 March 2016\160314_16_59_02';
 
 FlagPlot = 0;
-Radius = 10;
+Radius = 8;
 
 MeanDistAll = [];
 MinDistAll = [];
