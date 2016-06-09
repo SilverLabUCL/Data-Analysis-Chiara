@@ -1,12 +1,13 @@
-function [Answer] = PointsInBranch(Tree, Branch, BranchesInfo, Points, Plane)
+function [Answer] = PointsInBranch(Tree, Branch, BranchesInfo, Points, Plane, FlagPlot)
 
 % find whether Points are in the branch Branch of the dendritic tree Tree. Do it only for plane Plane
 % output vector is Answer, that has same length as Points, and contains
 % logicals
 
 % find nodes that are in Branch and in right plane
-NodesBranch = find(BranchesInfo == Branch);
+NodesBranch = find(BranchesInfo(:, 1) == Branch);
 Nodes = NodesBranch( find( round(Tree.Z(NodesBranch)) == Plane ));
+
 
 if length(Nodes) > 1 % if there are at least two nodes
     
@@ -33,12 +34,13 @@ if length(Nodes) > 1 % if there are at least two nodes
     end
     
     % plot
-    PoiInBranch = find(Answer == 1);
-    figure;
-    plot(Points(:,1), Points(:,2),'.') % plot all points with fluorescence
-    hold on; plot(Points(PoiInBranch,1), Points(PoiInBranch,2),'mo') % plot points in branch
-    hold on; plot(Segment(:,1), Segment(:,2),'r-') % plot branch
-    
+    if FlagPlot
+        PoiInBranch = find(Answer == 1);
+        figure;
+        plot(Points(:,1), Points(:,2),'.') % plot all points with fluorescence
+        hold on; plot(Points(PoiInBranch,1), Points(PoiInBranch,2),'mo') % plot points in branch
+        hold on; plot(Segment(:,1), Segment(:,2),'r-') % plot branch
+    end
 else
     Answer = NaN;
 end
