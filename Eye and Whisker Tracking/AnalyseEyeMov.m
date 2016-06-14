@@ -1,30 +1,36 @@
+function [EyeMov] = AnalyseEyeMov(PupilCentroid, TimeStamps)
 
+TimeVisStim = [4 6]; % time during which visual stimulus is on, in seconds
 
-load('EyeTracked.mat', 'PupilCentroid')
+% find beginning of each trial
+StartTrials = [ find(TimeStamps == 0) length(TimeStamps)];
+n_trials = length(StartTrials)-1;
 
-DiameterEye = 3.37; % in mm
-PixelToMm = 0.013; % conversion factor from pixels to mm
-
-n_frames = size(PupilCentroid,1);
-EyeMov = NaN(1,n_frames); % in mm, eye movement
-Dist = NaN(1,n_frames); % distance from starting position of pupil
-EyeMovAng = NaN(1,n_frames); % in degrees
-DistAng = NaN(1,n_frames);
-
-for t = 2:n_frames
+if n_trials == 16 % check this is a stack with gratings presentation, 16 trials
+    % initialise stuff
+    EyeMovAng = NaN(n_trials, (TimeVisStim(2) - TimeVisStim(1))*30+3); % eye movement in angle, degrees
+    EyeMov = NaN(1,n_trials); % measure if there was an eye movement bigger than 5 degrees
     
-    if isnan(PupilCentroid(t,1)) == 0
-        EyeMov(t) = PixelToMm*sqrt( (PupilCentroid(t,1)-PupilCentroid(t-1,1))^2 + (PupilCentroid(t,2)-PupilCentroid(t-1,2))^2 );
-        Dist(t) = PixelToMm*sqrt( (PupilCentroid(t,1)-PupilCentroid(1,1))^2 + (PupilCentroid(t,2)-PupilCentroid(1,2))^2 );
-    else
-        EyeMov(t) = NaN;
-        Dist(t) = NaN;
+    % measure eye movements during visual stimulus presentation in each trial
+    for t = 1:n_trials
+        
+        TimeTrial = TimeStamps(StartTrials(t) : StartTrials(t+1)-1);
+        [ ~, StartVisStim] = min( abs(TimeTrial - TimeVisStim(1)*1e3) );
+        [ ~, EndVisStim] = min( abs(TimeTrial - TimeVisStim(2)*1e3) );
+        
+        StartVisStim = StartVisStim + StartTrials(t)-1;
+        EndVisStim = EndVisStim + StartTrials(t)-1;
+        
+        EyeMovAng(t, 1: (EndVisStim-StartVisStim+1)) = MeasureEyeMovements( PupilCentroid(StartVisStim:EndVisStim, :), 1 );
+        
+        EyeMov(t) = isempty( EyeMovAng(t, EyeMovAng(t,:) > 5));
     end
     
-    % convert to angles
-    EyeMovAng(t) = atan( EyeMov(t)/DiameterEye )*180/pi;
-    DistAng(t) = atan( Dist(t)/DiameterEye )*180/pi;
+    EyeMov = abs(EyeMov-1);
     
+else
+    EyeMov = [];
 end
 
+end
 
