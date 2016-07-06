@@ -17,6 +17,7 @@ folders{11} = 'C:\Data Analysis\Clyde\15 March 2016\Clyde Cell 2 BranchesCoactiv
 folders{12} = 'C:\Data Analysis\Bonnie\14 March 2016\Bonnie Cell 7 BranchesCoactive.mat';
 
 AllData = [];
+AllData2 = [];
 
 for cell = 1:length(folders)
     
@@ -24,6 +25,7 @@ for cell = 1:length(folders)
     [ PercTimesActive1,   PercTimesActive2] = PercAPsEachBranchDivideTwo( BranchesCoActivebAP, ImagedBranchesbAP );
     
     AllData = [AllData PercTimesActive1(2:end)];
+    AllData2 = [AllData2 PercTimesActive2(2:end)];
 
 end
 

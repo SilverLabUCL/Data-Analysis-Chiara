@@ -17,7 +17,7 @@ TotStatTime = 0;
 for s = 1:nStacks
     
     % load data
-    [ ResponsesBin, Times_Lin, Segments, Speed, TimesSpeed, FilesLoaded{s,1} ] = LoadResponsesSpeedData(FilesLoaded{s,1});
+    [ ResponsesBin, Times_Lin, Segments, Speed, TimesSpeed] = LoadResponsesSpeedData(FilesLoaded{s});
     
     % convert speed to same temporal scale as responses
     TimesResp = mean(Times_Lin(Segments,:),1);
@@ -43,7 +43,7 @@ for s = 1:nStacks
     SpatialDistribRun{s} = DistribRunP;
     SpatialDistribStat{s} = DistribStatP;
     
-    clear SpeedInt TimesRun TimesStat 
+    clear SpeedInt TimesRun TimesStat ResponsesBin Times_Lin Segments Speed TimesSpeed
     
 end
 
@@ -73,7 +73,7 @@ end
 end
 
 
-function [ ResponsesBin, Times_Lin, Segments, speed, time, FilesLoaded ] = LoadResponsesSpeedData(FilesLoaded)
+function [ ResponsesBin, Times_Lin, Segments, speed, time] = LoadResponsesSpeedData(FilesLoaded)
 
 if isempty(FilesLoaded) == 1
     % the user loads a file that contains TransientsChar
@@ -84,8 +84,9 @@ else
 end
 
 % mat files
-PathSpeed = pathname(1: find(pathname == '\', 2,'last') );
-load(FilesLoaded,'ResponsesBin', 'Times_Lin', 'Segments')
+PathSpeed = pathname(1: find(pathname == '\', 3,'last') );
+load(FilesLoaded,'ResponsesBin', 'Segments')
+load([pathname 'CharacteriseTransients.mat'],'Times_Lin')
 load([PathSpeed 'SpeedConcat.mat'],'speed','time')
 
 end
